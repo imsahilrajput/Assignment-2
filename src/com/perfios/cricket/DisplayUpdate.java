@@ -71,13 +71,49 @@ public class DisplayUpdate {
         System.out.println("Name\tMatches Played\tRuns Scored\tWickets Taken\tDucks\tPlayer type");
         myMap.values().stream().collect(Collectors.toList()).stream().sorted(new PlayerNameComparator()).forEach(player -> displaySinglePlayer(player));
     }
+    public void selectTeam() {
+        myTeam.stream().sorted();
+        int bowlerInEleven = 0;
+        int wkInEleven = 0;
+        List<Cricketer> playingEleven = new ArrayList<>();
+        //Adding top 7 player according to average and cheking how many bowlers are there
+        for (int i = 0; i < 7; i++) {
+            playingEleven.add(myTeam.get(i));
 
-    public static void main(String[] args) {
+            if (playingEleven.get(i).getPlayerType() == 2) {
+
+                bowlerInEleven++;
+            } else if (playingEleven.get(i).getPlayerType() == 4) {
+
+                wkInEleven++;
+            }
+
+        }
+
+        //Making sure there are at least 3 bowler and one wicketkeeper
+        for (int i = 8; i < 20; i++) {
+            while (bowlerInEleven <= 3) {
+                if (myTeam.get(i).getPlayerType() == 2) {
+                    Cricketer player = myTeam.get(i);
+                    playingEleven.add(player);
+                    bowlerInEleven++;
+                }
+            }
+            while (wkInEleven < 1) {
+                if (myTeam.get(i).getPlayerType() == 4) {
+                    Cricketer player = myTeam.get(i);
+                    playingEleven.add(player);
+                    wkInEleven++;
+                }
+            }
+        }
+    }
+
+    public void acceptInput(){
+        Scanner sc = new Scanner(System.in);
         int bowlerCount=0;
         int allRounderCount =0;
         boolean valid=false;
-        Scanner sc = new Scanner(System.in);
-        myTeam=  new ArrayList<>();
         while(!valid){
             myTeam.removeAll(myTeam);
             for(int i =0;i<20;i++){
@@ -113,53 +149,45 @@ public class DisplayUpdate {
 
             }
         }
+    }
 
+    public static void main(String[] args) throws PlayerNotFoundException {
 
+        Scanner sc = new Scanner(System.in);
+        myTeam=  new ArrayList<>();
 
-
-        System.out.println("id  "+ "  Matches Played  "+"  Runs  "+"  Wickets Taken  "+"  Duck  "+"  Player Type");
-
-        for(int i =0;i<20;i++){
-            System.out.println(i+"\t\t\t"+myTeam.get(i).getMatchesPlayed()+"\t\t\t"+myTeam.get(i).getRuns()+"\t\t\t"+myTeam.get(i).getWicket()+"\t\t\t"+myTeam.get(i).getDuck()+"\t\t\t"+myTeam.get(i).getPlayerType());
-        }
-
-        myTeam.stream().sorted();
-        int bowlerInEleven=0;
-        int wkInEleven=0;
-        List<Cricketer> playingEleven = new ArrayList<>();
-        //Adding top 7 player according to average and cheking how many bowlers are there
-        for(int i =0;i<7;i++){
-            playingEleven.add(myTeam.get(i));
-
-            if(playingEleven.get(i).getPlayerType()==2){
-
-                bowlerInEleven++;
-            } else if (playingEleven.get(i).getPlayerType()==4) {
-
-                wkInEleven++;
+        DisplayUpdate displayUpdate = new DisplayUpdate();
+        while(true){
+            System.out.println(" 1: Display All Players \n 2: Update Player Information By Name \n 3: Display Final Team \n 4: Add Player Information \n 5: Exit");
+            switch (sc.nextInt()){
+                case 1:
+                    displayUpdate.displayAllPlayers();
+                    break;
+                case 2:
+                    displayUpdate.updatePlayerByName();
+                    break;
+                case 3:
+                    displayUpdate.selectTeam();
+                    break;
+                case 4:
+                    displayUpdate.acceptInput();
+//                    teamMaker.setAllPlayers();
+                    break;
+                case 5:
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
-
         }
+//        System.out.println("id  "+ "  Matches Played  "+"  Runs  "+"  Wickets Taken  "+"  Duck  "+"  Player Type");
+//
+//        for(int i =0;i<20;i++){
+//            System.out.println(i+"\t\t\t"+myTeam.get(i).getMatchesPlayed()+"\t\t\t"+myTeam.get(i).getRuns()+"\t\t\t"+myTeam.get(i).getWicket()+"\t\t\t"+myTeam.get(i).getDuck()+"\t\t\t"+myTeam.get(i).getPlayerType());
+//        }
 
-        //Making sure there are at least 3 bowler and one wicketkeeper
-        for(int i=8;i<20;i++){
-            while(bowlerInEleven<=3){
-                if(myTeam.get(i).getPlayerType()==2){
-                    Cricketer player=myTeam.get(i);
-                    playingEleven.add(player);
-                    bowlerInEleven++;
-                }
-            }while(wkInEleven<1){
-                if(myTeam.get(i).getPlayerType()==4){
-                    Cricketer player=myTeam.get(i);
-                    playingEleven.add(player);
-                    wkInEleven++;
-                }
-            }
+
 
 
         }
     }
-}
-
 
